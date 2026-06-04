@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -220,7 +220,138 @@ function RoadJourney({ onMilestone }: { onMilestone: () => void }) {
   );
 }
 
-// ---------- PAGE ----------
+// Special: an elegant "reasons I love you" letter with a reveal-on-demand centerpiece
+const REASONS: Array<{ n: string; text: ReactNode }> = [
+  { n: "i.", text: <>The way you walk into a room and somehow rearrange the air in it.</> },
+  { n: "ii.", text: <>How you argue like a lawyer over the smallest things — and how you're almost always right.</> },
+  { n: "iii.", text: <>That you've kept me honest for twelve years, and gentle for one.</> },
+  { n: "iv.", text: <>Your laugh. The real one. The one you try to hide in restaurants.</> },
+  { n: "v.", text: <>The way you remember everything — every date, every promise, every shirt I shouldn't have worn.</> },
+  { n: "vi.", text: <>How you love loudly and forgive quietly.</> },
+  { n: "vii.", text: <>That you are, without trying, the most home thing I have ever known.</> },
+];
+
+const WHISPERS = [
+  "you make ordinary tuesdays feel like something worth writing about.",
+  "i'd recognize your footsteps before your voice.",
+  "every good day of mine has you somewhere in it.",
+  "you're the only person i tell things to twice — once to share, once to keep.",
+  "if there's a next life, i'm finding you in college again.",
+  "you make me want to be the version of me you already see.",
+  "i love you in the way that doesn't get loud — it just stays.",
+];
+
+function ReasonsSection({ onBiriyani, onDress }: { onBiriyani: () => void; onDress: () => void }) {
+  const [whisperIdx, setWhisperIdx] = useState(0);
+  const [revealed, setRevealed] = useState(false);
+
+  const nextWhisper = () => {
+    setRevealed(true);
+    setWhisperIdx((i) => (i + 1) % WHISPERS.length);
+  };
+
+  return (
+    <section className="relative mx-auto max-w-5xl px-6 py-28">
+      <div className="mb-14 text-center">
+        <p className="font-[var(--font-script)] text-3xl text-primary">a small love letter</p>
+        <h2 className="mt-2 font-[var(--font-display)] text-4xl font-bold sm:text-5xl">
+          Reasons, in no particular order
+        </h2>
+        <div className="mx-auto mt-5 flex items-center justify-center gap-3">
+          <span className="h-px w-12 bg-primary/40" />
+          <span className="text-primary">✦</span>
+          <span className="h-px w-12 bg-primary/40" />
+        </div>
+      </div>
+
+      <div className="grid items-start gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+        {/* Letter / list */}
+        <article className="relative rounded-2xl border border-border bg-[oklch(0.99_0.01_60)] p-8 shadow-[var(--shadow-soft)] sm:p-12">
+          <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-primary/10" />
+          <ol className="space-y-5">
+            {REASONS.map((r, i) => (
+              <li key={i} className="flex gap-4">
+                <span className="mt-1 w-8 shrink-0 font-[var(--font-display)] text-sm italic text-primary">
+                  {r.n}
+                </span>
+                <p className="font-[var(--font-display)] text-lg italic leading-relaxed text-foreground sm:text-xl">
+                  {r.text}
+                </p>
+              </li>
+            ))}
+            <li className="flex gap-4">
+              <span className="mt-1 w-8 shrink-0 font-[var(--font-display)] text-sm italic text-primary">viii.</span>
+              <p className="font-[var(--font-display)] text-lg italic leading-relaxed text-foreground sm:text-xl">
+                Your devotion to{" "}
+                <button onClick={onBiriyani} className="underline decoration-dotted underline-offset-4 hover:text-primary">
+                  kozhikode biriyani
+                </button>
+                {" "}— sacred, non-negotiable, and frankly, inspiring.
+              </p>
+            </li>
+            <li className="flex gap-4">
+              <span className="mt-1 w-8 shrink-0 font-[var(--font-display)] text-sm italic text-primary">ix.</span>
+              <p className="font-[var(--font-display)] text-lg italic leading-relaxed text-foreground sm:text-xl">
+                The way you always tell me to{" "}
+                <button onClick={onDress} className="underline decoration-dotted underline-offset-4 hover:text-primary">
+                  wear something nice
+                </button>
+                {" "}— and how somehow, with you, I want to.
+              </p>
+            </li>
+          </ol>
+
+          <div className="mt-10 flex items-end justify-between">
+            <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">a partial list</p>
+            <p className="font-[var(--font-script)] text-3xl text-primary">— Bubu</p>
+          </div>
+        </article>
+
+        {/* The special thing: a whisper box */}
+        <aside className="lg:sticky lg:top-8">
+          <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-[oklch(0.96_0.04_30)] to-[oklch(0.92_0.06_20)] p-8 shadow-[var(--shadow-glow)]">
+            <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-primary/10 blur-2xl" />
+            <div className="absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-gold/20 blur-2xl" />
+
+            <p className="relative text-xs uppercase tracking-[0.3em] text-primary">a private line, for you</p>
+            <h3 className="relative mt-2 font-[var(--font-display)] text-2xl font-semibold">
+              Whisper of the moment
+            </h3>
+
+            <div className="relative mt-6 min-h-[140px] rounded-xl bg-card/80 p-5 backdrop-blur">
+              {!revealed ? (
+                <p className="font-[var(--font-script)] text-2xl text-muted-foreground">
+                  press the button. i wrote some things only you should hear.
+                </p>
+              ) : (
+                <p
+                  key={whisperIdx}
+                  className="font-[var(--font-script)] text-2xl text-foreground"
+                  style={{ animation: "var(--animate-fade-up)" }}
+                >
+                  “{WHISPERS[whisperIdx]}”
+                </p>
+              )}
+            </div>
+
+            <button
+              onClick={nextWhisper}
+              className="relative mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-[var(--shadow-soft)] transition hover:scale-[1.02] hover:shadow-[var(--shadow-glow)]"
+            >
+              {revealed ? "another one →" : "whisper to me 🤍"}
+            </button>
+
+            <p className="relative mt-4 text-center text-[11px] uppercase tracking-widest text-muted-foreground">
+              {revealed ? `${whisperIdx + 1} / ${WHISPERS.length}` : `${WHISPERS.length} hidden inside`}
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+  );
+}
+
+
 function Index() {
   const [found, setFound] = useState<Set<string>>(new Set());
   const [showLetter, setShowLetter] = useState(false);
@@ -361,36 +492,11 @@ function Index() {
         </div>
       </section>
 
-      {/* THINGS ABOUT HER */}
-      <section className="relative mx-auto max-w-5xl px-6 py-24">
-        <div className="mb-12 text-center">
-          <p className="font-[var(--font-script)] text-3xl text-primary">about you</p>
-          <h2 className="mt-2 font-[var(--font-display)] text-4xl font-bold sm:text-5xl">Things I love about you</h2>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {[
-            { e: "🍛", t: "Your serious devotion to ", a: (
-              <button onClick={() => find("biriyani", "the way to your heart 💘")} className="underline decoration-dotted hover:text-primary">
-                kozhikode biriyani
-              </button>
-            )},
-            { e: "👗", t: "How you always tell me to ", a: (
-              <button onClick={handleDressClick} className="underline decoration-dotted hover:text-primary">
-                wear something nice
-              </button>
-            )},
-            { e: "🧠", t: "How sharp and stubborn you are — in the best way", a: null },
-            { e: "😤", t: "You fight with me and then feed me", a: null },
-            { e: "🌧️", t: "Sharing one umbrella even when there are two", a: null },
-            { e: "🫶", t: "Just being you — every single day", a: null },
-          ].map((x, i) => (
-            <div key={i} className="rounded-2xl border border-border bg-card/80 p-6 shadow-[var(--shadow-soft)] backdrop-blur transition hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
-              <div className="mb-3 text-3xl">{x.e}</div>
-              <p className="text-foreground">{x.t}{x.a}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* REASONS — elegant letter style */}
+      <ReasonsSection
+        onBiriyani={() => find("biriyani", "the way to your heart 💘")}
+        onDress={handleDressClick}
+      />
 
       {/* SECRET HUNT */}
       <section className="relative mx-auto max-w-3xl px-6 py-16 text-center">
