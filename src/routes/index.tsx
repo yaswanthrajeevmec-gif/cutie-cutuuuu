@@ -361,36 +361,11 @@ function Index() {
         </div>
       </section>
 
-      {/* THINGS ABOUT HER */}
-      <section className="relative mx-auto max-w-5xl px-6 py-24">
-        <div className="mb-12 text-center">
-          <p className="font-[var(--font-script)] text-3xl text-primary">about you</p>
-          <h2 className="mt-2 font-[var(--font-display)] text-4xl font-bold sm:text-5xl">Things I love about you</h2>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {[
-            { e: "🍛", t: "Your serious devotion to ", a: (
-              <button onClick={() => find("biriyani", "the way to your heart 💘")} className="underline decoration-dotted hover:text-primary">
-                kozhikode biriyani
-              </button>
-            )},
-            { e: "👗", t: "How you always tell me to ", a: (
-              <button onClick={handleDressClick} className="underline decoration-dotted hover:text-primary">
-                wear something nice
-              </button>
-            )},
-            { e: "🧠", t: "How sharp and stubborn you are — in the best way", a: null },
-            { e: "😤", t: "You fight with me and then feed me", a: null },
-            { e: "🌧️", t: "Sharing one umbrella even when there are two", a: null },
-            { e: "🫶", t: "Just being you — every single day", a: null },
-          ].map((x, i) => (
-            <div key={i} className="rounded-2xl border border-border bg-card/80 p-6 shadow-[var(--shadow-soft)] backdrop-blur transition hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
-              <div className="mb-3 text-3xl">{x.e}</div>
-              <p className="text-foreground">{x.t}{x.a}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* REASONS — elegant letter style */}
+      <ReasonsSection
+        onBiriyani={() => find("biriyani", "the way to your heart 💘")}
+        onDress={handleDressClick}
+      />
 
       {/* SECRET HUNT */}
       <section className="relative mx-auto max-w-3xl px-6 py-16 text-center">
