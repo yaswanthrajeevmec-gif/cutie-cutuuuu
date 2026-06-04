@@ -221,7 +221,7 @@ function RoadJourney({ onMilestone }: { onMilestone: () => void }) {
 }
 
 // Special: an elegant "reasons I love you" letter with a reveal-on-demand centerpiece
-const REASONS: Array<{ n: string; text: React.ReactNode }> = [
+const REASONS: Array<{ n: string; text: ReactNode }> = [
   { n: "i.", text: <>The way you walk into a room and somehow rearrange the air in it.</> },
   { n: "ii.", text: <>How you argue like a lawyer over the smallest things — and how you're almost always right.</> },
   { n: "iii.", text: <>That you've kept me honest for twelve years, and gentle for one.</> },
