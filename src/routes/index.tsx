@@ -34,15 +34,15 @@ const JOURNEY: Stop[] = [
     emoji: "🌷",
   },
   {
-    year: "2013",
+    year: "2025",
     title: "College — our paths crossed",
-    body: "I was your senior. You were the junior who never let me win an argument. I never stood a chance.",
+    body: "You were the only girl who i wanted to spend the rest of my life with.",
     emoji: "🎓",
   },
   {
-    year: "12 years",
-    title: "The long friendship",
-    body: "Late-night calls, biriyani plans, you yelling at me to change my shirt. The slow magic of becoming everything to each other.",
+    year: "",
+    title: "best days ever",
+    body: "Late-night calls, nadakatha beach plans, you yelling at me to buy dresses. The slow magic of becoming everything to each other.",
     emoji: "💌",
   },
   {
@@ -100,18 +100,31 @@ function FloatingHearts() {
   );
 }
 
-function ImageSlot({ label, ratio = "4/3", hint }: { label: string; ratio?: string; hint?: string }) {
+function ImageSlot({ label, ratio = "4/3", hint, src }: { label: string; ratio?: string; hint?: string; src?: string }) {
   return (
     <div
-      className="relative w-full overflow-hidden rounded-xl border border-dashed border-primary/30 bg-card/60 shadow-[var(--shadow-soft)] backdrop-blur"
+      className="group relative w-full overflow-hidden rounded-xl shadow-[var(--shadow-soft)] transition hover:scale-[1.02] hover:shadow-[var(--shadow-glow)]"
       style={{ aspectRatio: ratio }}
       data-image-slot={label}
     >
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 p-4 text-center">
-        <span className="text-3xl">📷</span>
-        <p className="font-[var(--font-script)] text-2xl text-primary">{label}</p>
-        {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
-      </div>
+      {src ? (
+        <>
+          <img
+            src={src}
+            alt={label}
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground/50 to-transparent opacity-0 transition group-hover:opacity-100" />
+          <p className="absolute bottom-3 left-0 right-0 text-center font-[var(--font-script)] text-lg text-white opacity-0 transition group-hover:opacity-100">{label}</p>
+        </>
+      ) : (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 border border-dashed border-primary/30 bg-card/60 p-4 text-center backdrop-blur rounded-xl">
+          <span className="text-3xl">📷</span>
+          <p className="font-[var(--font-script)] text-2xl text-primary">{label}</p>
+          {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
+          <p className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground/60">add photo to public/</p>
+        </div>
+      )}
     </div>
   );
 }
@@ -224,15 +237,15 @@ function RoadJourney({ onMilestone }: { onMilestone: () => void }) {
 const REASONS: Array<{ n: string; text: ReactNode }> = [
   { n: "i.", text: <>The way you walk into a room and somehow rearrange the air in it.</> },
   { n: "ii.", text: <>How you argue like a lawyer over the smallest things — and how you're almost always right.</> },
-  { n: "iii.", text: <>That you've kept me honest for twelve years, and gentle for one.</> },
-  { n: "iv.", text: <>Your laugh. The real one. The one you try to hide in restaurants.</> },
+  { n: "iii.", text: <>That you've kept me honest and gentle for one.</> },
+  { n: "iv.", text: <>Your laugh. The real one. Thats all I want to see.</> },
   { n: "v.", text: <>The way you remember everything — every date, every promise, every shirt I shouldn't have worn.</> },
   { n: "vi.", text: <>How you love loudly and forgive quietly.</> },
   { n: "vii.", text: <>That you are, without trying, the most home thing I have ever known.</> },
 ];
 
 const WHISPERS = [
-  "you make ordinary tuesdays feel like something worth writing about.",
+  "you make my boring life feel like something worth living for.",
   "i'd recognize your footsteps before your voice.",
   "every good day of mine has you somewhere in it.",
   "you're the only person i tell things to twice — once to share, once to keep.",
@@ -483,12 +496,13 @@ function Index() {
           <p className="mt-3 text-muted-foreground">I'll drop your photos into these slots.</p>
         </div>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-          <ImageSlot label="Little you" />
-          <ImageSlot label="College days" ratio="3/4" />
-          <ImageSlot label="That smile" />
-          <ImageSlot label="All dressed up" ratio="3/4" />
-          <ImageSlot label="Biriyani date" />
-          <ImageSlot label="My favourite" />
+          {/* ↓ Images loaded from public/ folder */}
+          <ImageSlot label="Little you"      src="/WhatsApp Image 2026-06-04 at 10.02.58 PM.jpeg" />
+          <ImageSlot label="sweetie pie"    src="/WhatsApp Image 2026-06-04 at 10.02.58 PM (1).jpeg" ratio="3/4" />
+          <ImageSlot label="That smile"      src="/WhatsApp Image 2026-06-04 at 10.02.58 PM (2).jpeg" />
+          <ImageSlot label="All dressed up"  src="/WhatsApp Image 2026-06-04 at 10.02.58 PM (3).jpeg" ratio="3/4" />
+          <ImageSlot label="cutie pieee"   src="/WhatsApp Image 2026-06-04 at 10.02.58 PM (4).jpeg" />
+          <ImageSlot label="my chakkaraa"    src="/WhatsApp Image 2026-06-04 at 10.02.58 PM (5).jpeg" />
         </div>
       </section>
 
