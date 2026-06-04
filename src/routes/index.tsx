@@ -1,80 +1,75 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Cutu & Bubu — Happy 1st Anniversary" },
-      { name: "description", content: "Our story: from college seniors-and-juniors to forever. Happy first anniversary, Cutu." },
+      { title: "Happy Birthday, Cutu 🎂" },
+      { name: "description", content: "A little website for my Cutu — a journey through everything that makes you, you. Happy birthday." },
     ],
   }),
   component: Index,
 });
 
 // ---------- DATA ----------
-const ANNIVERSARY = new Date("2025-05-20T00:00:00");
-// You started dating May 20. "12 years over" — friendship started ~2013.
-const FRIENDSHIP_START = new Date("2013-08-01T00:00:00");
-
-type TimelineItem = {
-  date: string;
+type Stop = {
+  year: string;
   title: string;
   body: string;
   emoji: string;
 };
 
-const TIMELINE: TimelineItem[] = [
+// Journey OF HER — birthday is about her
+const JOURNEY: Stop[] = [
   {
-    date: "College Days",
-    title: "Senior meets junior",
-    body: "I was your senior. You probably thought I was annoying. (You were right.)",
+    year: "Day 1",
+    title: "The world got luckier",
+    body: "Somewhere, someone whispered 'she's here' — and the rest of us were just waiting to meet you.",
+    emoji: "👶",
+  },
+  {
+    year: "Growing up",
+    title: "Little Cutu",
+    body: "Stubborn, sweet, sharp. The same things I love about you now, just smaller.",
+    emoji: "🌷",
+  },
+  {
+    year: "2013",
+    title: "College — our paths crossed",
+    body: "I was your senior. You were the junior who never let me win an argument. I never stood a chance.",
     emoji: "🎓",
   },
   {
-    date: "The In-Between",
-    title: "12 years of slow magic",
-    body: "Friendship, late-night calls, biriyani runs, dressing up for nothing — laying the foundation of us.",
+    year: "12 years",
+    title: "The long friendship",
+    body: "Late-night calls, biriyani plans, you yelling at me to change my shirt. The slow magic of becoming everything to each other.",
     emoji: "💌",
   },
   {
-    date: "May 20",
-    title: "The day everything changed",
-    body: "We finally said it out loud. Best decision either of us ever made.",
-    emoji: "💍",
+    year: "May 20",
+    title: "Us, officially",
+    body: "We finally said it. Best decision either of us ever made.",
+    emoji: "💞",
   },
   {
-    date: "Today",
-    title: "Happy 1st Anniversary, Cutu",
-    body: "One year as us. A thousand more loading. Always your Bubu.",
-    emoji: "💖",
+    year: "Today",
+    title: "Happy Birthday, Cutu",
+    body: "Another year of you in the world. There is no better gift than that. I love you.",
+    emoji: "🎂",
   },
 ];
-
-// ---------- HELPERS ----------
-function useCountup(target: Date) {
-  const [t, setT] = useState(() => Date.now());
-  useEffect(() => {
-    const i = setInterval(() => setT(Date.now()), 1000);
-    return () => clearInterval(i);
-  }, []);
-  const diff = Math.max(0, t - target.getTime());
-  const days = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const mins = Math.floor((diff % 3600000) / 60000);
-  const secs = Math.floor((diff % 60000) / 1000);
-  return { days, hours, mins, secs };
-}
 
 // ---------- COMPONENTS ----------
 function FloatingHearts() {
   const hearts = useMemo(
-    () => Array.from({ length: 14 }).map((_, i) => ({
+    () => Array.from({ length: 18 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100,
-      delay: Math.random() * 8,
-      duration: 8 + Math.random() * 8,
+      delay: Math.random() * 10,
+      duration: 9 + Math.random() * 9,
       size: 14 + Math.random() * 22,
       opacity: 0.25 + Math.random() * 0.4,
+      char: ["♥","🎈","🌸","✨","🎂"][Math.floor(Math.random()*5)],
     })),
     []
   );
@@ -91,13 +86,13 @@ function FloatingHearts() {
             animation: `floatUp ${h.duration}s linear ${h.delay}s infinite`,
           }}
         >
-          ♥
+          {h.char}
         </span>
       ))}
       <style>{`
         @keyframes floatUp {
           0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-          10% { opacity: 0.6; }
+          10% { opacity: 0.7; }
           100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
         }
       `}</style>
@@ -108,7 +103,7 @@ function FloatingHearts() {
 function ImageSlot({ label, ratio = "4/3", hint }: { label: string; ratio?: string; hint?: string }) {
   return (
     <div
-      className="group relative w-full overflow-hidden rounded-xl border border-dashed border-primary/30 bg-card/60 shadow-[var(--shadow-soft)] backdrop-blur"
+      className="relative w-full overflow-hidden rounded-xl border border-dashed border-primary/30 bg-card/60 shadow-[var(--shadow-soft)] backdrop-blur"
       style={{ aspectRatio: ratio }}
       data-image-slot={label}
     >
@@ -121,55 +116,124 @@ function ImageSlot({ label, ratio = "4/3", hint }: { label: string; ratio?: stri
   );
 }
 
-function Countup() {
-  const { days, hours, mins, secs } = useCountup(ANNIVERSARY);
-  const items = [
-    { v: days, l: "Days" },
-    { v: hours, l: "Hours" },
-    { v: mins, l: "Minutes" },
-    { v: secs, l: "Seconds" },
-  ];
-  return (
-    <div className="grid grid-cols-4 gap-2 sm:gap-4">
-      {items.map((it) => (
-        <div key={it.l} className="rounded-xl bg-card/80 px-2 py-4 text-center shadow-[var(--shadow-soft)] backdrop-blur">
-          <div className="font-[var(--font-display)] text-2xl font-bold text-primary sm:text-4xl">{String(it.v).padStart(2, "0")}</div>
-          <div className="text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">{it.l}</div>
-        </div>
-      ))}
-    </div>
-  );
-}
+// The road / journey component — winding SVG path with stops
+function RoadJourney({ onMilestone }: { onMilestone: () => void }) {
+  // Generate winding path
+  const stops = JOURNEY.length;
+  const segmentH = 320; // px per stop
+  const totalH = segmentH * stops;
+  const width = 600;
+  const centerX = width / 2;
 
-function EasterEgg({ found, onFind }: { found: Set<string>; onFind: (k: string) => void }) {
+  // Build a smooth zig-zag path
+  const points = JOURNEY.map((_, i) => {
+    const y = i * segmentH + 140;
+    const x = centerX + (i % 2 === 0 ? -160 : 160);
+    return { x, y };
+  });
+
+  const pathD = points.reduce((acc, p, i) => {
+    if (i === 0) return `M ${centerX} 40 Q ${centerX} 90 ${p.x} ${p.y}`;
+    const prev = points[i - 1];
+    const midY = (prev.y + p.y) / 2;
+    return `${acc} C ${prev.x} ${midY}, ${p.x} ${midY}, ${p.x} ${p.y}`;
+  }, "");
+
   return (
-    <button
-      onClick={() => onFind("biriyani")}
-      className={`group inline-flex items-center gap-1 rounded-full px-2 py-0.5 transition ${
-        found.has("biriyani") ? "bg-gold/40" : "hover:bg-gold/20"
-      }`}
-      title="Psst..."
-    >
-      kozhikode biriyani 🍛
-    </button>
+    <div className="relative mx-auto w-full max-w-3xl">
+      <svg
+        viewBox={`0 0 ${width} ${totalH + 80}`}
+        className="absolute inset-0 h-full w-full"
+        preserveAspectRatio="none"
+        aria-hidden
+      >
+        <defs>
+          <linearGradient id="road" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="oklch(0.78 0.14 80)" />
+            <stop offset="50%" stopColor="oklch(0.65 0.18 15)" />
+            <stop offset="100%" stopColor="oklch(0.55 0.19 15)" />
+          </linearGradient>
+        </defs>
+        {/* Road shadow */}
+        <path d={pathD} fill="none" stroke="oklch(0.55 0.19 15 / 0.15)" strokeWidth="38" strokeLinecap="round" />
+        {/* Road */}
+        <path d={pathD} fill="none" stroke="url(#road)" strokeWidth="22" strokeLinecap="round" />
+        {/* Dashed center line */}
+        <path
+          d={pathD}
+          fill="none"
+          stroke="oklch(0.99 0.005 30)"
+          strokeWidth="2"
+          strokeDasharray="10 14"
+          strokeLinecap="round"
+        />
+      </svg>
+
+      {/* Stops positioned over the road */}
+      <div className="relative" style={{ height: totalH + 80 }}>
+        {JOURNEY.map((stop, i) => {
+          const p = points[i];
+          const leftSide = i % 2 === 0; // card goes on opposite side of dot
+          return (
+            <div key={i}>
+              {/* Pin/dot on the road */}
+              <button
+                onClick={i === JOURNEY.length - 1 ? onMilestone : undefined}
+                className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  left: `${(p.x / width) * 100}%`,
+                  top: p.y,
+                }}
+                aria-label={stop.title}
+              >
+                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-card text-2xl shadow-[var(--shadow-glow)] ring-4 ring-primary transition hover:scale-110">
+                  {stop.emoji}
+                </span>
+              </button>
+
+              {/* Card on the opposite side */}
+              <div
+                className="absolute w-[44%] max-w-xs"
+                style={{
+                  top: p.y - 60,
+                  [leftSide ? "right" : "left"]: "4%",
+                }}
+              >
+                <div className="rounded-2xl border border-border bg-card/85 p-4 shadow-[var(--shadow-soft)] backdrop-blur sm:p-5">
+                  <div className="text-[10px] font-semibold uppercase tracking-widest text-primary">{stop.year}</div>
+                  <h3 className="mt-1 font-[var(--font-display)] text-lg font-semibold leading-tight sm:text-xl">{stop.title}</h3>
+                  <p className="mt-1.5 text-xs text-muted-foreground sm:text-sm">{stop.body}</p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+
+        {/* Start flag */}
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 text-3xl">🚩</div>
+        {/* Finish */}
+        <div className="absolute left-1/2 -translate-x-1/2 text-4xl" style={{ top: totalH + 30 }}>
+          🎉
+        </div>
+      </div>
+    </div>
   );
 }
 
 // ---------- PAGE ----------
 function Index() {
   const [found, setFound] = useState<Set<string>>(new Set());
-  const [konami, setKonami] = useState<string[]>([]);
   const [showLetter, setShowLetter] = useState(false);
   const [dressClicks, setDressClicks] = useState(0);
   const [toast, setToast] = useState<string | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [confetti, setConfetti] = useState(false);
 
   const find = (key: string, msg: string) => {
     setFound((s) => {
       if (s.has(key)) return s;
       const n = new Set(s);
       n.add(key);
-      showToast(`✨ Easter egg ${n.size}/5 — ${msg}`);
+      showToast(`✨ Secret ${n.size}/5 — ${msg}`);
       return n;
     });
   };
@@ -179,22 +243,17 @@ function Index() {
     setTimeout(() => setToast(null), 3000);
   };
 
-  // Konami code easter egg: ↑↑↓↓←→←→BA
+  // Konami + type "cutu"
   useEffect(() => {
-    const seq = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
+    const seq = ["arrowup","arrowup","arrowdown","arrowdown","arrowleft","arrowright","arrowleft","arrowright","b","a"];
+    let buf: string[] = [];
+    let typed = "";
     const onKey = (e: KeyboardEvent) => {
-      setKonami((prev) => {
-        const next = [...prev, e.key.toLowerCase()].slice(-seq.length);
-        if (next.join(",") === seq.join(",")) find("konami", "secret unlocked 🌹");
-        return next;
-      });
-      // Type "cutu" anywhere
+      buf = [...buf, e.key.toLowerCase()].slice(-seq.length);
+      if (buf.join(",") === seq.join(",")) find("konami", "secret unlocked 🌹");
       if (e.key.length === 1) {
-        setKonami((prev) => {
-          const last = prev.concat(e.key.toLowerCase()).slice(-4).join("");
-          if (last === "cutu") find("name", "I love you, Cutu 💞");
-          return prev;
-        });
+        typed = (typed + e.key.toLowerCase()).slice(-4);
+        if (typed === "cutu") find("name", "I love you, Cutu 💞");
       }
     };
     window.addEventListener("keydown", onKey);
@@ -207,32 +266,60 @@ function Index() {
     if (n === 5) find("dress", "Yes ma'am, wearing the good shirt 👔");
   };
 
+  const blowCandle = () => {
+    setConfetti(true);
+    find("cake", "make a wish 🕯️");
+    setTimeout(() => setConfetti(false), 4000);
+  };
+
   return (
     <main className="relative min-h-screen overflow-x-hidden">
       <FloatingHearts />
 
-      {/* Toast */}
       {toast && (
         <div className="fixed left-1/2 top-6 z-50 -translate-x-1/2 rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground shadow-[var(--shadow-glow)]">
           {toast}
         </div>
       )}
 
+      {confetti && (
+        <div className="pointer-events-none fixed inset-0 z-40" aria-hidden>
+          {Array.from({ length: 60 }).map((_, i) => (
+            <span
+              key={i}
+              className="absolute top-0 text-2xl"
+              style={{
+                left: `${Math.random() * 100}%`,
+                animation: `confetti ${2 + Math.random() * 2}s linear ${Math.random()}s forwards`,
+              }}
+            >
+              {["🎉","🎊","🌸","✨","💖"][i % 5]}
+            </span>
+          ))}
+          <style>{`@keyframes confetti { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }`}</style>
+        </div>
+      )}
+
       {/* HERO */}
       <section className="relative mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center px-6 py-20 text-center">
-        <p className="font-[var(--font-script)] text-2xl text-primary/80 sm:text-3xl">happy first anniversary,</p>
-        <h1 className="mt-2 font-[var(--font-display)] text-6xl font-bold leading-none tracking-tight text-foreground sm:text-8xl md:text-9xl">
-          Cutu <span className="font-[var(--font-script)] italic text-primary">&</span> Bubu
+        <p className="font-[var(--font-script)] text-2xl text-primary/80 sm:text-3xl">happy birthday,</p>
+        <h1 className="mt-2 font-[var(--font-display)] text-7xl font-bold leading-none tracking-tight text-foreground sm:text-9xl">
+          Cutu
         </h1>
         <p className="mt-6 max-w-xl text-balance text-muted-foreground sm:text-lg">
-          12 years of knowing you. 1 year of <em>us</em>. A little website
-          for a love that's been a long time coming.
+          Another year of the most stubborn, beautiful, biriyani-loving human I know.
+          This little corner of the internet is for you — a journey through everything that makes you, <em>you</em>.
         </p>
 
-        <div className="mt-10 w-full max-w-md">
-          <p className="mb-3 text-xs uppercase tracking-[0.3em] text-muted-foreground">together since may 20</p>
-          <Countup />
-        </div>
+        {/* Cake */}
+        <button
+          onClick={blowCandle}
+          className="mt-12 flex flex-col items-center transition hover:scale-105"
+          aria-label="Blow the candle"
+        >
+          <span className="text-7xl drop-shadow-[0_8px_20px_rgba(255,100,100,0.4)]">🎂</span>
+          <span className="mt-2 text-xs uppercase tracking-widest text-muted-foreground">tap to blow the candle</span>
+        </button>
 
         <button
           onClick={() => setShowLetter(true)}
@@ -241,70 +328,61 @@ function Index() {
           Open my letter to you 💌
         </button>
 
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce text-muted-foreground">↓ scroll</div>
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce text-sm text-muted-foreground">↓ take the journey</div>
       </section>
 
-      {/* STORY / TIMELINE */}
-      <section className="relative mx-auto max-w-5xl px-6 py-24">
+      {/* JOURNEY ROAD */}
+      <section className="relative mx-auto max-w-5xl px-4 py-24 sm:px-6">
         <div className="mb-16 text-center">
-          <p className="font-[var(--font-script)] text-3xl text-primary">our story</p>
-          <h2 className="mt-2 font-[var(--font-display)] text-4xl font-bold sm:text-5xl">A journey, not a moment</h2>
+          <p className="font-[var(--font-script)] text-3xl text-primary">the road so far</p>
+          <h2 className="mt-2 font-[var(--font-display)] text-4xl font-bold sm:text-5xl">Your journey</h2>
+          <p className="mx-auto mt-3 max-w-md text-muted-foreground">
+            Every turn led to today. Follow the road — it's all the way to you.
+          </p>
         </div>
 
-        <div className="relative">
-          <div className="absolute left-4 top-0 hidden h-full w-px bg-gradient-to-b from-primary via-accent to-primary/20 md:left-1/2 md:block" />
-          <div className="space-y-12">
-            {TIMELINE.map((t, i) => (
-              <div key={i} className={`grid items-center gap-6 md:grid-cols-2 ${i % 2 ? "md:[direction:rtl]" : ""}`}>
-                <div className="md:[direction:ltr]">
-                  <div className="rounded-2xl border border-border bg-card/80 p-6 shadow-[var(--shadow-soft)] backdrop-blur">
-                    <div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-widest text-primary">
-                      <span className="text-xl">{t.emoji}</span>{t.date}
-                    </div>
-                    <h3 className="font-[var(--font-display)] text-2xl font-semibold">{t.title}</h3>
-                    <p className="mt-2 text-muted-foreground">{t.body}</p>
-                  </div>
-                </div>
-                <div className="md:[direction:ltr]">
-                  <ImageSlot label={`Memory ${i + 1}`} hint="(I'll add this photo soon)" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <RoadJourney onMilestone={() => find("road", "you reached the finish line 🎉")} />
       </section>
 
       {/* GALLERY */}
       <section className="relative mx-auto max-w-6xl px-6 py-24">
         <div className="mb-12 text-center">
-          <p className="font-[var(--font-script)] text-3xl text-primary">us, in pictures</p>
+          <p className="font-[var(--font-script)] text-3xl text-primary">you, in pictures</p>
           <h2 className="mt-2 font-[var(--font-display)] text-4xl font-bold sm:text-5xl">The gallery</h2>
-          <p className="mt-3 text-muted-foreground">Drop in photos when you're ready — these slots will hold them.</p>
+          <p className="mt-3 text-muted-foreground">I'll drop your photos into these slots.</p>
         </div>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-          <ImageSlot label="First photo" />
-          <ImageSlot label="That trip" ratio="3/4" />
-          <ImageSlot label="Silly one" />
-          <ImageSlot label="Dressed up" ratio="3/4" />
+          <ImageSlot label="Little you" />
+          <ImageSlot label="College days" ratio="3/4" />
+          <ImageSlot label="That smile" />
+          <ImageSlot label="All dressed up" ratio="3/4" />
           <ImageSlot label="Biriyani date" />
-          <ImageSlot label="Just us" />
+          <ImageSlot label="My favourite" />
         </div>
       </section>
 
-      {/* LITTLE THINGS */}
+      {/* THINGS ABOUT HER */}
       <section className="relative mx-auto max-w-5xl px-6 py-24">
         <div className="mb-12 text-center">
-          <p className="font-[var(--font-script)] text-3xl text-primary">the little things</p>
+          <p className="font-[var(--font-script)] text-3xl text-primary">about you</p>
           <h2 className="mt-2 font-[var(--font-display)] text-4xl font-bold sm:text-5xl">Things I love about you</h2>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            { e: "🍛", t: "Your love for ", a: <EasterEgg found={found} onFind={(k) => find(k, "the way to your heart 💘")} /> },
-            { e: "👗", t: "How you always tell me to ", a: <button onClick={handleDressClick} className="underline decoration-dotted hover:text-primary">wear something nice</button> },
-            { e: "📞", t: "Late-night calls that turned into mornings", a: null },
-            { e: "😤", t: "The way you fight with me and then feed me", a: null },
+            { e: "🍛", t: "Your serious devotion to ", a: (
+              <button onClick={() => find("biriyani", "the way to your heart 💘")} className="underline decoration-dotted hover:text-primary">
+                kozhikode biriyani
+              </button>
+            )},
+            { e: "👗", t: "How you always tell me to ", a: (
+              <button onClick={handleDressClick} className="underline decoration-dotted hover:text-primary">
+                wear something nice
+              </button>
+            )},
+            { e: "🧠", t: "How sharp and stubborn you are — in the best way", a: null },
+            { e: "😤", t: "You fight with me and then feed me", a: null },
             { e: "🌧️", t: "Sharing one umbrella even when there are two", a: null },
-            { e: "🫶", t: "Just being you — Cutu", a: null },
+            { e: "🫶", t: "Just being you — every single day", a: null },
           ].map((x, i) => (
             <div key={i} className="rounded-2xl border border-border bg-card/80 p-6 shadow-[var(--shadow-soft)] backdrop-blur transition hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
               <div className="mb-3 text-3xl">{x.e}</div>
@@ -314,27 +392,19 @@ function Index() {
         </div>
       </section>
 
-      {/* EASTER EGG TRACKER */}
+      {/* SECRET HUNT */}
       <section className="relative mx-auto max-w-3xl px-6 py-16 text-center">
         <div className="inline-block rounded-2xl border border-dashed border-primary/40 bg-card/60 p-6 backdrop-blur">
-          <p className="text-xs uppercase tracking-widest text-muted-foreground">secret hunt</p>
+          <p className="text-xs uppercase tracking-widest text-muted-foreground">birthday secret hunt</p>
           <p className="mt-2 font-[var(--font-script)] text-3xl text-primary">{found.size} / 5 found</p>
           <p className="mt-2 text-sm text-muted-foreground">
-            There are 5 hidden things on this page. Click the heart, click suspicious words, try the Konami code,
-            type my name for you, and click the page somewhere… you'll know when you find them.
+            There are little secrets hiding on this page. Blow the candle, click suspicious words,
+            reach the end of the road, type your nickname, try the Konami code… you'll know when you find them.
           </p>
-          <button
-            onClick={() => find("heart", "you found the heartbeat ♥")}
-            className="mt-4 text-4xl"
-            style={{ animation: "var(--animate-heart)" }}
-            aria-label="heart"
-          >
-            ❤️
-          </button>
         </div>
       </section>
 
-      {/* Hidden corner egg */}
+      {/* hidden corner */}
       <button
         onClick={() => find("corner", "sneaky 🌙")}
         aria-label="secret"
@@ -345,7 +415,7 @@ function Index() {
       <footer className="relative mx-auto max-w-5xl px-6 py-16 text-center">
         <p className="font-[var(--font-script)] text-4xl text-primary">forever your Bubu 💞</p>
         <p className="mt-2 text-sm text-muted-foreground">
-          Built with way too much love · {new Date().getFullYear()}
+          Made with way too much love · happy birthday Cutu
         </p>
       </footer>
 
@@ -363,17 +433,15 @@ function Index() {
             <button onClick={() => setShowLetter(false)} className="absolute right-4 top-4 text-muted-foreground hover:text-foreground">✕</button>
             <p className="font-[var(--font-script)] text-3xl text-primary">My Cutu,</p>
             <div className="mt-4 space-y-3 text-foreground">
-              <p>Twelve years ago I had no idea the junior I kept teasing would one day become my whole world.</p>
-              <p>One year ago today, we stopped pretending we were just friends. Best yes I've ever said.</p>
-              <p>Thank you for the biriyani arguments, the "go change your shirt" looks, and every single ordinary day that you make extraordinary.</p>
-              <p>Here's to the next 12. And the 12 after that.</p>
+              <p>Happy birthday, my love.</p>
+              <p>Twelve years ago I had no idea the junior I kept teasing would one day become my whole world. And yet here we are — me, still trying to keep up with you.</p>
+              <p>Thank you for the biriyani arguments, the "go change your shirt" looks, and every ordinary day you turn into something I'll remember forever.</p>
+              <p>I hope this year is loud, full, soft where it needs to be, and exactly the kind of beautiful you deserve.</p>
               <p className="pt-3 font-[var(--font-script)] text-2xl text-primary">— Bubu</p>
             </div>
           </div>
         </div>
       )}
-
-      <audio ref={audioRef} />
     </main>
   );
 }
