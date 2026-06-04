@@ -1,19 +1,8 @@
 {
-  "outputDirectory": "dist",
-  "builds": [
-    {
-      "src": "dist/server/server.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/assets/(.*)",
-      "dest": "/dist/server/assets/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/dist/server/server.js"
-    }
-  ]
+  "framework": null,
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "env": {
+    "NITRO_PRESET": "vercel"
+  }
 }
